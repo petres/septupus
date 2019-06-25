@@ -1,0 +1,21 @@
+{
+    "invaders": {
+        "folder": "objects/invaders",
+        "color": 6
+    },
+    "ship": {
+        "folder": "objects/ship",
+        "color": 5
+    },
+    "ingredients": {
+        "folder": "objects/ingredients",
+        "categories": {
+            "N": {
+                "color": 3
+            },
+            "A": {
+                "color": 2
+            }
+        }
+    }
+}

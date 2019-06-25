@@ -1,0 +1,42 @@
+{
+    "enabled": false,
+    "serialPort": "/dev/ttyACM0",
+    "mixing": {
+        "portion": 25,
+        "volume": 200
+    },
+    "ingredientsCatgories": {
+        "N": {
+            "factor": 2
+        },
+        "A": {
+            "factor": 1
+        }
+    },
+    "ingredients": {
+        "rum": {
+            "category": "A",
+            "arduino": 0
+        },
+        "vodka": {
+            "category": "A",
+            "arduino": 2
+        },
+        "orange": {
+            "category": "N",
+            "arduino": 1
+        },
+        "gin": {
+            "category": "A",
+            "arduino": 3
+        },
+        "tonic": {
+            "category": "N",
+            "arduino": 4
+        },
+        "cola": {
+            "category": "N",
+            "arduino": 5
+        }
+    }
+}

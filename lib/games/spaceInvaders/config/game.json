@@ -1,0 +1,8 @@
+{
+    "sleepTime": 20,
+    "lifes": 3,
+    "creationTimes": {
+        "invaders": 430,
+        "goodies": 3020
+    }
+}

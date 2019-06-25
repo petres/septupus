@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Economica&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Material+Icons&display=swap');
+//@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+$loudness: #ffd39b;
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    max-width: 900px;
+    margin: auto;
+}
+
+h1 {
+    text-align: right;
+    font-family: 'Economica', sans-serif;
+    margin-right: 8px;
+}
+
+div.sound {
+    border: 1px solid #CCC;
+    margin: 10px;
+
+    div.loudness {
+        height: 60px;
+        position: relative;
+        svg {
+            rect {
+                fill: $loudness;
+                &.a1 {
+                    fill: #ff9000;
+                }
+                &.a2 {
+                    fill: #ffa130;
+                }
+                &.a3 {
+                    fill: #ffbf72;
+                }
+                stroke: #FFF;
+            }
+            rect.f {
+                opacity: 0;
+            }
+            rect.f:hover {
+                opacity: 0.5;
+                fill: mix($info, $loudness);
+                cursor: pointer;
+            }
+        }
+    }
+
+    div.control {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        padding: 0.3rem 0;
+        &[data-status='stopped'] {
+            button[data-action='stop'] {
+                display: none;
+            }
+            button[data-action='pause'] {
+                display: none;
+            }
+        }
+        &[data-status='playing'] {
+            button[data-action='play'] {
+                display: none;
+            }
+        }
+        &[data-status='paused'] {
+            button[data-action='pause'] {
+                display: none;
+            }
+        }
+        .duration {
+            font-family: "Courier New", Courier, monospace;
+            position: absolute;
+            left: 0.3rem;
+            top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #888;
+        }
+        .buttons {
+            position: absolute;
+            right: 0.3rem;
+            button {
+                line-height: 0.5;
+                padding: 0.1rem;
+            }
+        }
+    }
+
+    div.info {
+        padding: 0.6rem;
+    }
+}
+
+#main.container {
+
+}

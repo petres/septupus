@@ -1,0 +1,27 @@
+<form data-module="{{ module }}">
+    {% with mod=modules[module] %}
+    {% for group, names in mod.getDisplayVars().items() %}
+        <h4>{{ group }}</h4>
+        {% for name in names %}
+        {% with params=mod.getVar(name), value=mod.getValue(name) %}
+            <div class="form-group">
+                <label>{{ params['name'] }}</label>
+                {% if params['control'] == 'range' %}
+                    <input type="range" class="form-control-range sync" name="{{ name }}" min="{{ params['min'] }}" max="{{ params['max'] }}" value="{{ value }}">
+                {% elif params['control'] == 'radio' %}
+                    <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+                    {% for n, v in params['options'].items() %}
+                        <label class="btn btn-primary{% if value == v %} active{% endif %}">
+                            <input type="radio" class="sync" name="{{ name }}" id="{{ name ~ '-' ~ v }}" value="{{ v }}" autocomplete="off"{% if value == v %} checked{% endif %}>{{ n }}
+                        </label>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <input class="form-control-range sync" name="{{ name }}" value="{{ params['value'] }}">
+                {% endif %}
+            </div>
+        {% endwith %}
+        {% endfor %}
+    {% endfor %}
+    {% endwith %}
+</form>
