@@ -9,50 +9,38 @@ class CameraProcessor(object):
     vars = {
         'threshold': {
             'name': "Threshold",
-            'type': 'I',
-            'control': 'range',
-            'min': 0,
-            'max': 255,
+            'type': 'I', 'control': 'range',
+            'min': 0, 'max': 255,
             'value': 200
         },
         'blurRadius': {
             'name': "Blur Radius",
-            'type': 'I',
-            'control': 'range',
-            'min': 0,
-            'max': 100,
+            'type': 'I', 'control': 'range',
+            'min': 0, 'max': 100,
             'value': 0
         },
         'slidingWindowSize': {
             'name': "Sliding Window Size (Position)",
-            'type': 'I',
-            'control': 'range',
-            'min': 0,
-            'max': 20,
+            'type': 'I', 'control': 'range',
+            'min': 0, 'max': 20,
             'value': 5
         },
         'slidingWindowShootSize': {
             'name': "Sliding Window Size (Shoot)",
-            'type': 'I',
-            'control': 'range',
-            'min': 0,
-            'max': 20,
+            'type': 'I', 'control': 'range',
+            'min': 0, 'max': 20,
             'value': 9
         },
         'shootHeight': {
             'name': "Shoot Height",
-            'type': 'I',
-            'control': 'range',
-            'min': 0,
-            'max': 20,
+            'type': 'I', 'control': 'range',
+            'min': 0, 'max': 20,
             'value': 5
         },
         'margin': {
             'name': "Margin",
-            'type': 'I',
-            'control': 'range',
-            'min': 0,
-            'max': 20,
+            'type': 'I', 'control': 'range',
+            'min': 0, 'max': 20,
             'value': 5
         },
     }

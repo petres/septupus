@@ -37,7 +37,10 @@ def main(screen = None):
     time.sleep(0.1)
     spaceInvaders.run()
 
+    camera.save()
+
     camera.stopProcess()
+
 
 #main()
 curses.wrapper(main)

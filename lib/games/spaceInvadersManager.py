@@ -22,70 +22,54 @@ class SpaceInvadersManager(SharedManager):
             'game': {
                 'sleepTime': {
                     'name': "Sleep (ms)",
-                    'type': 'I',
-                    'control': 'range',
-                    'min': 5,
-                    'max': 50,
+                    'type': 'I', 'control': 'range',
+                    'min': 5, 'max': 50,
                     'value': config.getValue('game.sleepTime')
                 },
                 'lifes': {
-                    'name': "Lifes",
-                    'type': 'I',
+                    'name': "Lifes", 'type': 'I',
                     'control': 'range',
-                    'min': 1,
-                    'max': 9,
+                    'min': 1, 'max': 9,
                     'value': config.getValue('game.lifes')
                 },
                 'creationTimes': {
                     'invaders': {
                         'name': "Creation Time, Invaders",
-                        'type': 'I',
-                        'control': 'range',
-                        'min': 200,
-                        'max': 5000,
+                        'type': 'I', 'control': 'range',
+                        'min': 200, 'max': 5000,
                         'value': config.getValue('game.creationTimes.invaders')
                     },
                     'goodies': {
                         'name': "Creation Time, Goodies",
-                        'type': 'I',
-                        'control': 'range',
-                        'min': 200,
-                        'max': 5000,
+                        'type': 'I', 'control': 'range',
+                        'min': 200, 'max': 5000,
                         'value': config.getValue('game.creationTimes.goodies')
                     }
                 }, 'useCamera': {
                     'name': "Camera Input",
-                    'type': 'I',
+                    'type': 'I', 'control': 'radio',
                     'value': 0,
-                    'control': 'radio',
-                    'options': {
-                        "Off": 0,
-                        "On": 1
-                    }
+                    'options': {i.name: i.value for i in self.OnOffFlags}
                 }
             },
             'robot': {
                 'mixing': {
                     'portion': {
                         'name': "Portion",
-                        'type': 'I',
-                        'control': 'range',
-                        'min': 10,
-                        'max': 50,
+                        'type': 'I', 'control': 'range',
+                        'min': 10, 'max': 50,
                         'value': config.getValue('robot.mixing.portion')
                     },
                     'volume': {
                         'name': "Volume",
-                        'type': 'I',
-                        'control': 'range',
-                        'min': 100,
-                        'max': 500,
+                        'type': 'I', 'control': 'range',
+                        'min': 100, 'max': 500,
                         'value': config.getValue('robot.mixing.volume')
                     }
                 }
             }
         }
-    
+
     def run(self):
         self.game.run()
 

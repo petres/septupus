@@ -34,42 +34,33 @@ class CameraManager(SharedManager, ProcessManager):
                     'value': 0
                 },
                 'resolution': {
-                    'type': 'I',
+                    'type': 'I', 'control': 'radio',
                     'value': 0,
-                    'control': 'radio',
                     'options': {r: i for i, r in enumerate(self.resolutions)}
                 }
             },
             'control': {
                 'showImage': {
                     'name': "Display Image",
-                    'type': 'I',
+                    'type': 'I', 'control': 'radio',
                     'value': self.ImageTypes.org.value,
-                    'control': 'radio',
                     'options': {i.name: i.value for i in self.ImageTypes}
                 },
                 'overlay': {
                     'name': "Display Image Overlay",
-                    'type': 'I',
+                    'type': 'I', 'control': 'radio',
                     'value': 0,
-                    'control': 'radio',
-                    'options': {
-                        "Off": 0,
-                        "On": 1
-                    }
+                    'options': {i.name: i.value for i in self.OnOffFlags}
                 },
                 'sleep': {
                     'name': "Sleep (ms)",
-                    'type': 'I',
-                    'control': 'range',
-                    'min': 0,
-                    'max': 1000,
+                    'type': 'I', 'control': 'range',
+                    'min': 0, 'max': 1000,
                     'value': 10
                 },
                 'flag': {
-                    'type': 'I',
+                    'type': 'I', 'control': 'radio',
                     'value': self.ControlFlags.run.value,
-                    'control': 'radio',
                     'options': {i.name: i.value for i in self.ControlFlags}
                 },
             },
