@@ -8,14 +8,10 @@
         "color": 5
     },
     "ingredients": {
-        "folder": "objects/ingredients",
-        "categories": {
-            "N": {
-                "color": 3
-            },
-            "A": {
-                "color": 2
-            }
-        }
+        "folder": "objects/ingredients"
+    },
+    "endScreens": {
+        "won": "overFull",
+        "lost": "overLifes"
     }
 }

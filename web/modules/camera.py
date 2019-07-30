@@ -2,6 +2,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for,
     current_app, send_from_directory, send_file, Response, jsonify
 )
+import time
 
 bp = Blueprint('camera', __name__, url_prefix='/camera')
 
@@ -23,13 +24,19 @@ def start():
         'valid': True
     })
 
-@bp.route('/feed')
-def feed():
+@bp.route('/image')
+def image():
     if cam.isRunning() and cam.getValue('control.showImage') != cam.ImageTypes.off:
-        return Response(getFrame(),
-                        mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(cam.getFrame(),
+                        mimetype='image/jpeg')
 
-def getFrame():
-    while cam.isRunning() and cam.getValue('control.showImage') != cam.ImageTypes.off:
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + cam.getFrame() + b'\r\n')
+# @bp.route('/feed')
+# def feed():
+#     if cam.isRunning() and cam.getValue('control.showImage') != cam.ImageTypes.off:
+#         return Response(getFrame(),
+#                         mimetype='multipart/x-mixed-replace; boundary=frame')
+#
+# def getFrame():
+#     while cam.isRunning() and cam.getValue('control.showImage') != cam.ImageTypes.off:
+#         yield (b'--frame\r\n'
+#                b'Content-Type: image/jpeg\r\n\r\n' + cam.getFrame() + b'\r\n')

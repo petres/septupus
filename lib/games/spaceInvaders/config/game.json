@@ -1,8 +1,18 @@
 {
     "sleepTime": 20,
     "lifes": 3,
+    "goodies": 8,
     "creationTimes": {
-        "invaders": 430,
-        "goodies": 3020
-    }
+        "invaders": 10430,
+        "goodies": 320
+    },
+    "shoot": {
+        "speed": 10,
+        "pause": 8
+    },
+    "objectSpeed": {
+        "min": 4,
+        "max": 8
+    },
+    "sound": false
 }

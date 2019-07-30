@@ -1,8 +1,19 @@
 <div class="col-md-6">
-    <img src="{{ url_for('camera.feed') }}" class="img-fluid" style="min-width: 100%">
+    <!--img src=" url_for('camera.feed') " class="img-fluid" style="min-width: 100%"-->
+    <img data-src='{{ url_for('camera.image') }}' src='{{ url_for('camera.image') }}' id='camera_image' style="min-width: 100%" />
 </div>
+<script>
+$(function() {
+    var i = $('#camera_image')
+    function reloadImage() {
+        setTimeout(reloadImage, 100);
+        var d = new Date();
+        i.attr('src', i.data('src') + '?' + d.getTime());
+    }
+    reloadImage()
+});
+</script>
+
 <div class="col-md-6">
-    {% with module="camera" %}
-        {% include "controls.html.j2" %}
-    {% endwith %}
+    {% include "controls.html.j2" %}
 </div>

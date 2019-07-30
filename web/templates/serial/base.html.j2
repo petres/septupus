@@ -1,0 +1,42 @@
+<div class="col-md-6">
+    {% with module="serial" %}
+        {% include "controls.html.j2" %}
+    {% endwith %}
+</div>
+
+
+<div class="col-md-12">
+    <h4>communication</h4>
+    <pre id='serial-communication' class='pre-scrollable' style='height:100px; max-height:100px'></pre>
+    <form data-module="serial" onsubmit="return false;">
+        <div class="form-group">
+            <input type="text" id="serial-send" name="serial-send">
+        </div>
+    </form>
+</div>
+
+<script>
+$(document).ready(function(){
+    var readBox = $('#serial-communication')
+    var sendInput = $('#serial-send')
+
+    socket.on('serial.read', function(msg) {
+        readBox.append(msg)
+        readBox.scrollTop(readBox.prop("scrollHeight"));
+        console.log('serial.read', msg);
+    });
+
+    sendInput.keyup(function(event) {
+        if (event.keyCode === 13) {
+            console.log('serial.send', sendInput.val());
+            socket.emit('serial.send', {
+                source: 'serial.input',
+                message: sendInput.val()
+            });
+            sendInput.val('')
+            //$("#id_of_button").click();
+        }
+        event.preventDefault();
+    });
+});
+</script>

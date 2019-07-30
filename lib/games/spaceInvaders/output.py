@@ -1,4 +1,3 @@
-import logging
 import curses
 import numpy as np
 
@@ -7,7 +6,6 @@ from .utils import objectSigns
 
 class Output(object):
     statusWidth = 28
-    #statusWidth = 0
 
     def __init__(self, writers):
         self.writers = writers
@@ -26,13 +24,15 @@ class Output(object):
                 'size': (Output.statusWidth, screenSize[1])
             },
         }
-
-        logging.debug("areas: %s" % self.areas)
-
-
         self.clearArea(area='full')
-
         self.printField()
+        self.clearOverlay()
+
+    def setOverlay(self, overlay):
+        self.overlay = overlay
+
+    def clearOverlay(self):
+        self.overlay = None
 
     def printGame(self, game):
         self.clearArea('game')
@@ -40,18 +40,11 @@ class Output(object):
 
         self.printStatus(game)
 
+        if self.overlay:
+            self.centeredOutput('screens/%s.txt' % self.overlay)
+
         for o in list(Object.objects):
             self.printObject(o)
-
-        # temp = '\n'
-        # for y in range(self.matrix.shape[1]):
-        #     for x in range(self.matrix.shape[0]):
-        #         temp += chr(self.matrix[x, y, 0])
-        #     temp += '\n'
-        # f = open("screen.txt", "w")
-        # f.write(temp)
-        # f.close()
-
 
     def printField(self):
         fieldColor = 0
@@ -82,18 +75,23 @@ class Output(object):
         for i, n in enumerate(os.keys()):
             self.addSigns((ox + 2, oy + 2 + i), "%s: %d" % (n, os[n]), area='status')
 
+        oy = 7
+        #self.addSigns((ox + 2, oy + 2), "ML: %d" % (game.status["ml"]), area='status')
+        self.addSigns((ox + 2, oy + 2), "State: %s" % (game.state.name), area='status')
+        self.addSigns((ox + 2, oy + 3), "Time: %d" % (game.time), area='status')
+
 
         oy = 12
         for i, line in enumerate(objectSigns.get("objects/heart.txt")):
             self.addSigns((ox - 1, oy + i), line, color = 2, area='status')
 
-        for i, line in enumerate(objectSigns.get("objects/numbers/" + str(game.status['lifes']) + ".txt")):
+        for i, line in enumerate(objectSigns.get("objects/numbers/" + str(game.status['lifes'] % 10) + ".txt")):
             self.addSigns((ox, oy + 8 + i), line, area='status')
 
         for i, line in enumerate(objectSigns.get("objects/bottle.txt")):
             self.addSigns((ox + 12, oy + i), line, color = 4, area='status')
 
-        for i, line in enumerate(objectSigns.get("objects/numbers/" + str(game.status['count']) + ".txt")):
+        for i, line in enumerate(objectSigns.get("objects/numbers/" + str(len(game.status['goodies']) % 10) + ".txt")):
             self.addSigns((ox + 12, oy + 8 + i), line, area='status')
 
         # self.addSigns((x,10), "count:  " + str(game.status['count']))
@@ -108,10 +106,6 @@ class Output(object):
         # if self.screenSize[1] - 31 - (y + 15) > 10:
         #     for i, line in enumerate(objectSigns.get("objects/lebertron.txt")):
         #         self.addSigns((self.statusPos[0] + 1,  (y + 16) + (self.screenSize[1] - 31 - (y + 15) - 9)//2 + i), line, color = 7)
-
-
-    def printCountdown(self, nr):
-        self.centeredOutput("screens/countdown/" + str(nr) + ".txt")
 
     def printMl(self, pos, ml):
         x, y = pos
@@ -163,7 +157,7 @@ class Output(object):
             self.addSigns((x, y), l)
 
     def printObject(self, o):
-        x, y = o.getMapCoords()
+        x, y = o.getCoords()
 
         w, h = o.size
 

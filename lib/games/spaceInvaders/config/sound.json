@@ -1,0 +1,18 @@
+{
+    "background": "theme_jul2.wav",
+    "end": {
+        "lost": "lost.wav",
+        "won": "full.wav"
+    },
+    "shoot": "peng.wav",
+    "collisions": {
+        "ship": {
+            "goody": "mmmh.wav",
+            "invader": "quatsch.wav"
+        },
+        "shoot": {
+            "goody": "krach.wav",
+            "invader": "krach.wav"
+        }
+    }
+}

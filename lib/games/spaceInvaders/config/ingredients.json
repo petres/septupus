@@ -1,0 +1,32 @@
+{
+    "beverages": {
+        "rum": {
+            "category": "A"
+        },
+        "vodka": {
+            "category": "A"
+        },
+        "orange": {
+            "category": "N"
+        },
+        "gin": {
+            "category": "A"
+        },
+        "tonic": {
+            "category": "N"
+        },
+        "cola": {
+            "category": "N"
+        }
+    },
+    "catgories": {
+        "N": {
+            "factor": 2,
+            "color": 3
+        },
+        "A": {
+            "factor": 1,
+            "color": 2
+        }
+    }
+}

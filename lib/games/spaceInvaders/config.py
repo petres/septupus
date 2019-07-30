@@ -1,14 +1,12 @@
 from glob import glob
 import os
 import json
-import logging
 
 class ConfigManager(object):
     def __init__(self, path):
         path = os.path.join(path, 'config')
         files = glob(path + "/*.json")
         self.configs = {os.path.basename(f)[:-5]: json.load(open(f)) for f in files}
-        #logging.debug(self.configs)
 
 
     def getElement(self, name, base):

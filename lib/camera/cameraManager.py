@@ -1,15 +1,15 @@
 import cv2
-from multiprocessing import Process, Value, Array
-from enum import IntEnum, auto
 import numpy as np
-import time
 import logging
+from multiprocessing import Array
+from enum import IntEnum, auto
 from .cameraProcessor import CameraProcessor
-from ..sharedManager import SharedManager
-from ..processManager import ProcessManager
+from ..multiManager import MultiManager
 
 
-class CameraManager(SharedManager, ProcessManager):
+class CameraManager(MultiManager):
+    file = "instance/camera.json"
+
     class ImageTypes(IntEnum):
         off = auto()
         org = auto()
@@ -24,10 +24,11 @@ class CameraManager(SharedManager, ProcessManager):
     ]
 
     def __init__(self):
-        self.initVars()
+        self.processor = CameraProcessor
+        super().__init__()
 
     def getVars(self):
-        return {
+        vars = {
             'init': {
                 'device': {
                     'type': 'I',
@@ -51,56 +52,53 @@ class CameraManager(SharedManager, ProcessManager):
                     'type': 'I', 'control': 'radio',
                     'value': 0,
                     'options': {i.name: i.value for i in self.OnOffFlags}
-                },
-                'sleep': {
-                    'name': "Sleep (ms)",
-                    'type': 'I', 'control': 'range',
-                    'min': 0, 'max': 1000,
-                    'value': 10
-                },
-                'flag': {
-                    'type': 'I', 'control': 'radio',
-                    'value': self.ControlFlags.run.value,
-                    'options': {i.name: i.value for i in self.ControlFlags}
-                },
+                }
             },
             'output': {
                 'position': {
-                    'type': 'd',
+                    'name': "Position",
+                    'type': 'f',
                     'value': 0.5
                 },
                 'shootFlag': {
+                    'name': "Shoot Flag",
                     'type': 'b',
                     'value': 0
                 }
             },
-            'processor': CameraProcessor.vars
+            'processor': self.processor.vars
         }
+        vars.update(super().getVars())
+        return vars
 
     def getDisplayVars(self):
         return {
             'control': [
-                'control.sleep',
+                'multi.sleep',
                 'control.showImage',
                 'control.overlay'
             ],
-            'processor': ['processor.' + i for i in self.vars['processor'].keys()]
+            'processor': ['processor.' + i for i in self.vars['processor'].keys()],
+            'output': [
+                'output.position',
+                'output.shootFlag',
+            ]
         }
 
-    def prepareProcess(self):
+    def prepare(self):
         self.initParams = {
             'device': self.getValue('init.device'),
             'resolution': self.resolutions[self.getValue('init.resolution')],
         }
         self.image = Array('B', self.initParams['resolution'][0] * self.initParams['resolution'][1]*3)
 
-    def loopStart(self):
+    def loopPrepare(self):
         logging.info('CAMERA INIT: %s' % self.initParams)
         self.cap = cv2.VideoCapture(self.initParams['device'])
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.initParams['resolution'][0])
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.initParams['resolution'][1])
         params = {k: self.getValue('processor.' + k) for k, v in self.vars['processor'].items()}
-        self.cp = CameraProcessor(self.initParams, params)
+        self.cp = self.processor(self.initParams, params)
 
     def loopMain(self):
         ret, frame = self.cap.read()
@@ -108,16 +106,23 @@ class CameraManager(SharedManager, ProcessManager):
         imageType = self.ImageTypes(self.getValue('control.showImage')).name
         params['control.showImage'] = imageType
         o = self.cp.evaluate(frame, params)
+
+        output = o['output']
+        for k in output.keys():
+            if output[k] is not None:
+                self.setValue('.'.join(['output', k]), output[k])
+
         if imageType != "off":
-            i = o['images'][imageType]
-            if self.getValue('control.overlay') == 1 and "overlay" in o['images']:
-                overlay = o['images']['overlay']
+            images = o['images']
+            i = images[imageType]
+            if self.getValue('control.overlay') == 1 and "overlay" in images:
+                overlay = images['overlay']
                 cnd = (overlay[:, :, 0] + overlay[:, :, 1] + overlay[:, :, 2]) > 0
                 i[cnd] = overlay[cnd]
             self.image[:] = i.flatten().astype(np.uint8)
-        time.sleep(self.getValue('control.sleep')/1000)
 
-    def loopEnd(self):
+
+    def loopCleanup(self):
         self.cap.release()
 
     def getFrame(self):

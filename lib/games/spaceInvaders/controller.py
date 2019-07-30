@@ -1,78 +1,49 @@
+from .config import config
 import curses
 
 class Controller(object):
-    LEFT    = -1
-    RIGHT   =  1
-    QUIT    = -10
-    RETRY   = -11
-    SHOOT   = -12
-    PAUSE   = -13
-    CUPTEST = -15
+    def handleInput(self, game):
+        self.input = self.screen.getch()
+        self.checkControl(game)
+        pos = self.getPosition(game.ship.coords[0])
+        if type(pos) is float:
+            pos = int(pos * (game.output.areas['game']['size'][0] - game.ship.size[0]))
+        return (pos, self.getShoot())
 
-    def __init__(self, screen = None, position = False, mirror = False, margin = 0):
-        self.imp = None
+
+class ScreenController(Controller):
+    moveStepSize = 3
+
+    def __init__(self, screen):
+        self.input = None
         self.screen = screen
-        self.position = position
-        self.mirror = mirror
-        self.margin = margin
 
-    def setImp(self, imp):
-        self.imp = imp
+    def getPosition(self, oldPosition):
+        m = 0
+        if self.input == curses.KEY_LEFT:
+            m = -1
+        elif self.input == curses.KEY_RIGHT:
+            m = 1
 
-    def getInput(self):
-        c, k = self.getKeyboardInput();
+        x = oldPosition
+        x += m * self.moveStepSize
+        return x
 
-        if k is not None:
-            return k
+    def getShoot(self):
+        return self.input == ord(' ')
 
-        if self.imp is not None:
-            return self.imp.getInput(c)
-
-    def getPosition(self):
-        pos = self.imp.getPosition()
-
-        if self.margin > 0:
-            pos = pos*(1 + 0.01*2*self.margin) - 0.01*self.margin
-
-        if pos > 1:
-            pos = 1
-        elif pos < 0:
-            pos = 0
-
-        if self.mirror:
-            return 1 - pos
-        else:
-            return pos
-
-    def getKeyboardInput(self):
-        if self.screen is None:
-            return None
-
-        c = self.screen.getch()
-
-        if c == curses.KEY_LEFT:
-            return (c, Controller.LEFT)
-        elif c == curses.KEY_RIGHT:
-            return (c, Controller.RIGHT)
-        elif c == ord('q'):
-            return (c, Controller.QUIT)
-        elif c == ord('r'):
-            return (c, Controller.RETRY)
-        elif c == ord(' '):
-            return (c, Controller.SHOOT)
-        elif c == ord('p'):
-            return (c, Controller.PAUSE)
-        elif c == ord('n'):
-            Goody.generateT = "N"
-        elif c == ord('o'):
-            Goody.generateT = "O"
-        elif c == ord('c'):
-            Goody.generateT = None
-        elif c == ord('l'):
-            return (c, Controller.CUPTEST)
-
-        return (c, None)
-
-    def close(self):
-        if self.imp is not None:
-            self.imp.close()
+    def checkControl(self, game):
+        if self.input == ord('q'):
+            game.stopFlag = True
+        elif self.input == ord('n'):
+            game.generateGoodyType = "N"
+        elif self.input == ord('o'):
+            game.generateGoodyType = "O"
+        elif self.input == ord('c'):
+            game.generateGoodyType = None
+        elif self.input == ord('p'):
+            game.switchPause()
+        elif self.input == ord('r'):
+            game.play()
+        elif self.input == ord('s'):
+            game.end(game.EndState.quit)
