@@ -60,9 +60,9 @@ class RobotCameraGame(Game):
                 self.end(self.EndState.won)
 
     def getNextGoodyType(self):
-        g = []
+        g = None
         if self.robot:
-            g = list(self.robot.getAvailableIngredients().difference(('NONE', )))
+            g = list(self.robot.getAvailableIngredients())
         return super().getNextGoodyType(g = g)
 
     def robotStateUpdate(self, state):

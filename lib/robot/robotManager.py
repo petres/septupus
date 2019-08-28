@@ -72,8 +72,10 @@ class RobotManager(MultiManager):
     def getAvailableIngredients(self):
         ingredients = []
         for id in ['assignment.' + i for i in self.vars['assignment'].keys()]:
-            ingredients.append(self.ingredients[self.getValue(id)])
-        log.info(ingredients)
+            v = self.ingredients[self.getValue(id)]
+            if v != 'NONE':
+                ingredients.append(v)
+        #log.info(ingredients)
         return set(ingredients)
 
     def getPortForIngredient(self, ingredient):
