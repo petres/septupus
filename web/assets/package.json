@@ -19,7 +19,7 @@
         "sass-loader": "^7.1.0",
         "socket.io-client": "^2.2.0",
         "webpack": "^4.35.3",
-        "webpack-cli": "^3.3.6",
+        "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.4.1",
         "webpack-fix-style-only-entries": "^0.2.1",
         "webpack-manifest-plugin": "^2.0.4"
