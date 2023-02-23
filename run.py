@@ -1,4 +1,4 @@
-#!./venv/bin/python3
+#!/usr/bin/env python
 from web import WebManager
 from flask import request
 import threading

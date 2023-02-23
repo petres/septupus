@@ -1,0 +1,12 @@
+name: septupus
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - flask
+  - flask-socketio
+  - opencv
+  - pyserial
+  - pyaudio
+  - nodejs

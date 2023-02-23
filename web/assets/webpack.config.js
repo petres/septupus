@@ -2,7 +2,7 @@ var path = require('path');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 module.exports = {
     mode: 'development',
@@ -15,13 +15,14 @@ module.exports = {
         path: path.resolve(__dirname, "..", "static"),
         //publicPath: 'http://localhost:2992/assets/',
         //publicPath: 'http://localhost:5000/static/',
+        publicPath: '',
         filename: '[name].[chunkhash].js',
         //filename: '[name].js',
         //chunkFilename: '[id].[chunkhash].js'
     },
     devServer: {
         compress: false,
-        watchContentBase: true,
+        // watchContentBase: true,
         port: 9000,
         proxy: {
             '!(/static/**/**.*)': {
@@ -108,9 +109,9 @@ module.exports = {
             filename: '[name].[chunkhash].css',
             //filename: "style.[contenthash].css",
         }),
-        new ManifestPlugin({
+        new WebpackManifestPlugin({
             fileName: 'manifest.json',
-            stripSrc: true
+            basePath: ''
         })
     ]
 };
