@@ -50,6 +50,19 @@ class CameraProcessor(object):
             'value': 5
         },
     }
+    
+    output = {
+        'position': {
+            'name': "Position",
+            'type': 'f',
+            'value': 0.5
+        },
+        'shootFlag': {
+            'name': "Shoot Flag",
+            'type': 'b',
+            'value': 0
+        }
+    }
 
 
     def __init__(self, camParams, params):

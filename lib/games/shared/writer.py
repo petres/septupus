@@ -43,23 +43,23 @@ class ScreenWriter(Writer):
         except curses.error:
             pass
 
-class MatrixWriter(Writer):
-    def __init__(self, screenSize):
-        #t = np.dtype([('char', 'B'), ('color', 'B')])
-        #self.matrix = np.empty((x, y), dtype=t)
-        self.matrix = np.empty((screenSize[0], screenSize[1], 2), dtype='int')
-        super().__init__(screenSize)
+# class MatrixWriter(Writer):
+#     def __init__(self, screenSize):
+#         #t = np.dtype([('char', 'B'), ('color', 'B')])
+#         #self.matrix = np.empty((x, y), dtype=t)
+#         self.matrix = np.empty((screenSize[0], screenSize[1], 2), dtype='int')
+#         super().__init__(screenSize)
 
-    def addSigns(self, coords, signs, color=0):
-        #self.matrix[coords[0]:(coords[0]+len(sign)), coords[1]] = [(ord(s), color) for s in sign]
-        self.matrix[cx:(cx + len(signs)), cy, 0] = [ord(s) for s in signs]
-        self.matrix[cx:(cx + len(signs)), cy, 1] = color
+#     def addSigns(self, coords, signs, color=0):
+#         #self.matrix[coords[0]:(coords[0]+len(sign)), coords[1]] = [(ord(s), color) for s in sign]
+#         self.matrix[cx:(cx + len(signs)), cy, 0] = [ord(s) for s in signs]
+#         self.matrix[cx:(cx + len(signs)), cy, 1] = color
 
-    def clearArea(self, coords, size):
-        cx, cy = a['coords']
-        sx, sy = a['size']
+#     def clearArea(self, coords, size):
+#         cx, cy = a['coords']
+#         sx, sy = a['size']
 
-        #self.matrix[coords[0]:(coords[0] + size[0]), coords[1]:(coords[1] + size[1])] = (ord(sign), 0)
-        self.matrix[cx:(cx + sx), cy:(cy + sy), 0] = ord(' ')
-        self.matrix[cx:(cx + sx), cy:(cy + sy), 1] = 0
-        self.clearAreaImp(a['coords'], a['size'])
+#         #self.matrix[coords[0]:(coords[0] + size[0]), coords[1]:(coords[1] + size[1])] = (ord(sign), 0)
+#         self.matrix[cx:(cx + sx), cy:(cy + sy), 0] = ord(' ')
+#         self.matrix[cx:(cx + sx), cy:(cy + sy), 1] = 0
+#         self.clearAreaImp(a['coords'], a['size'])

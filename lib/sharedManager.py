@@ -36,6 +36,9 @@ class SharedManager(object):
         for p in name.split('.'):
             e = e[p]
         return e
+    
+    def getVars(self):
+        return {}
 
     def varExists(self, name):
         e = self.vars

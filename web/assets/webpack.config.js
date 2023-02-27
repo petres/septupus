@@ -1,14 +1,12 @@
 var path = require('path');
 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     mode: 'development',
     entry: {
-        main:    './scripts/main.js',
-        styles:  './styles/style.scss'
+        main:    './src/main.js',
     },
     output: {
         //path: '../static',
@@ -23,12 +21,12 @@ module.exports = {
     devServer: {
         compress: false,
         // watchContentBase: true,
-        port: 9000,
-        proxy: {
-            '!(/static/**/**.*)': {
-                target: 'http://127.0.0.1:5000',
-            },
-        },
+        // port: 9000,
+        // proxy: {
+        //     '!(/static/**/**.*)': {
+        //         target: 'http://127.0.0.1:5000',
+        //     },
+        // },
     },
     module: {
         rules: [
@@ -40,39 +38,12 @@ module.exports = {
                 }
             },
             {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                            /*options: {
-                                // you can specify a publicPath here
-                                // by default it uses publicPath in webpackOptions.output
-                                publicPath: '../',
-                                hmr: process.env.NODE_ENV === 'development',
-                            },*/
-                    },
-                    'css-loader',
-                ],
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
             },
             {
-                test: /\.scss$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                            /*options: {
-                                // you can specify a publicPath here
-                                // by default it uses publicPath in webpackOptions.output
-                                publicPath: '../',
-                                hmr: process.env.NODE_ENV === 'development',
-                            },*/
-                    },
-                    {
-                        loader: "css-loader" // translates CSS into CommonJS
-                    },
-                    {
-                        loader: "sass-loader" // compiles Sass to CSS
-                    }
-                ]
+                test: /\.scss$/i,
+                use: ["style-loader", "css-loader", "sass-loader"],
             },
             {
                 test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -101,14 +72,7 @@ module.exports = {
         ],
     },
     plugins: [
-        new FixStyleOnlyEntriesPlugin(),
-        new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
-            //filename: '[name].css',
-            filename: '[name].[chunkhash].css',
-            //filename: "style.[contenthash].css",
-        }),
+        // new HtmlWebpackPlugin(),
         new WebpackManifestPlugin({
             fileName: 'manifest.json',
             basePath: ''

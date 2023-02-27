@@ -14,7 +14,8 @@ from noddingpigeon.inference import postprocess
 class GestureTypes(IntEnum):
     nodding = 0
     turning = 1
-    undefined = 2
+    stationary = 2
+    undefined = 3
 
 
 class CameraProcessor(object):
@@ -23,13 +24,22 @@ class CameraProcessor(object):
             'name': "motion_threshold",
             'type': 'f', 'control': 'range',
             'min': 0, 'max': 1,
-            'value': 0.5,
+            'value': 0.7,
         },
         'gesture_threshold': {
             'name': "gesture_threshold",
             'type': 'f', 'control': 'range',
             'min': 0, 'max': 1,
-            'value': 0.9,
+            'value': 0.8,
+        },
+    }
+    
+    output = {
+        'gesture': {
+            'name': "gesture",
+            'type': 'I', 'control': 'radio',
+            'value': GestureTypes.undefined,
+            'options': {i.name: i.value for i in GestureTypes}
         },
     }
 
@@ -50,7 +60,6 @@ class CameraProcessor(object):
         with mp_face.FaceDetection(
             model_selection = 0, min_detection_confidence = 0.5
         ) as face_detection:
-            
             frame = cv2.cvtColor(bgr_frame, cv2.COLOR_BGR2RGB)  # pylint: disable=no-member
             result = face_detection.process(frame)
 
@@ -141,7 +150,11 @@ class CameraProcessor(object):
                 if output["gesture"] == 'turning':
                     r['output']["gesture"] = GestureTypes.turning
                 
-                for i in range(10):
+                if output["gesture"] == 'stationary':
+                    r['output']["gesture"] = GestureTypes.stationary
+                
+                
+                for i in range(30):
                     self.featuresLastFrames.popleft()
                 
                 # self.featuresLastFrames.clear()

@@ -24,8 +24,8 @@ def main(screen = None):
         'camera': CameraManager(),
         'web': WebManager(),
         'robot': RobotManager(),
-        # 'spaceInvaders': SpaceInvadersManager(screen),
-        'nodding': NoddingManager(screen),
+        # 'game': SpaceInvadersManager(screen),
+        'game': NoddingManager(screen),
     }
 
     for n, m in modules.items():
@@ -39,7 +39,7 @@ def main(screen = None):
 
     time.sleep(0.01)
 
-    modules['nodding'].run()
+    modules['game'].run()
 
     for n, m in modules.items():
         m.save()

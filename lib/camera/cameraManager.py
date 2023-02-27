@@ -4,9 +4,8 @@ import logging
 from multiprocessing import Array
 from enum import IntEnum, auto
 # from .cameraProcessorPositionShoot import CameraProcessor
-from .cameraProcessorNodding import CameraProcessor, GestureTypes
+from .cameraProcessorNodding import CameraProcessor
 from ..multiManager import MultiManager
-
 
 
 class CameraManager(MultiManager):
@@ -15,7 +14,6 @@ class CameraManager(MultiManager):
     class ImageTypes(IntEnum):
         off = auto()
         org = auto()
-        # overlay = auto()
         
         # TODO: move to processor
         # gray = auto()
@@ -23,8 +21,10 @@ class CameraManager(MultiManager):
 
     resolutions = [
         (160, 120),
-        (180, 320),
-        (240, 320)
+        (320, 180),
+        (424, 240),
+        (480, 270),
+        (640, 360),
     ]
 
     def __init__(self):
@@ -58,26 +58,8 @@ class CameraManager(MultiManager):
                     'options': {i.name: i.value for i in self.OnOffFlags}
                 }
             },
-            'output': {
-                # 'position': {
-                #     'name': "Position",
-                #     'type': 'f',
-                #     'value': 0.5
-                # },
-                # 'shootFlag': {
-                #     'name': "Shoot Flag",
-                #     'type': 'b',
-                #     'value': 0
-                # },
-                'gesture': {
-                    'name': "gesture",
-                    'type': 'I', 'control': 'radio',
-                    'value': GestureTypes.undefined,
-                    'options': {i.name: i.value for i in GestureTypes}
-                },
-            },
-
-            'processor': self.processor.vars
+            'processor': self.processor.vars,
+            'output': self.processor.output
         }
         vars.update(super().getVars())
         return vars
@@ -90,12 +72,7 @@ class CameraManager(MultiManager):
                 'control.overlay',
             ],
             'processor': ['processor.' + i for i in self.vars['processor'].keys()],
-            'output': [
-                'output.gesture',
-                # 'output.position',
-                # 'output.shootFlag',
-            ]
-            
+            'output': ['output.' + i for i in self.vars['output'].keys()],
         }
 
     def prepare(self):
@@ -115,6 +92,10 @@ class CameraManager(MultiManager):
 
     def loopMain(self):
         ret, frame = self.cap.read()
+        
+        if frame is None:
+            return
+        
         params = {k: self.getValue('processor.' + k) for k, v in self.vars['processor'].items()}
         imageType = self.ImageTypes(self.getValue('control.showImage')).name
         params['control.showImage'] = imageType

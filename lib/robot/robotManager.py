@@ -12,7 +12,7 @@ class RobotManager(MultiManager):
 
     class State(IntEnum):
         ready = auto()
-        readyCup= auto()
+        readyCup = auto()
         pouring = auto()
         bottleEmpty = auto()
         error = auto()
@@ -27,6 +27,12 @@ class RobotManager(MultiManager):
 
     def getVars(self):
         vars = {
+            'state': {
+                'name': "State",
+                'type': 'I', 'control': 'radio',
+                'value': self.State.unknown.value,
+                'options': {i.name: i.value for i in self.State}
+            },
             'assignment': {
             },
             'mixing': {
@@ -62,6 +68,7 @@ class RobotManager(MultiManager):
 
     def getDisplayVars(self):
         return {
+            'state': ['state'],
             'assignment': ['assignment.' + i for i in self.vars['assignment'].keys()],
             'mixing': [
                 'mixing.portion',

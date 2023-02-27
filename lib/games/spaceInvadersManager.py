@@ -6,7 +6,6 @@ from .spaceInvaders.game import Game
 from .shared.writer import ScreenWriter
 from .spaceInvaders.config import config
 from ..sharedManager import SharedManager
-from numpy.random import choice
 
 
 class CameraController(ScreenController):

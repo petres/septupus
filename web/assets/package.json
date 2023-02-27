@@ -12,16 +12,21 @@
         "bootstrap": "^4",
         "css-loader": "^6",
         "file-loader": "^6",
+        "html-webpack-plugin": "^5.5.0",
         "jquery": "^3",
         "mini-css-extract-plugin": "^2",
         "node-sass": "^8",
+        "pinia": "^2",
         "popper.js": "^1",
         "sass-loader": "^13",
         "socket.io-client": "^4",
+        "style-loader": "^3",
+        "vue": "^3",
+        "vue-loader": "^17",
+        "vue-router": "^4",
         "webpack": "^5",
         "webpack-cli": "^5",
-        "webpack-dev-server": "^4.11.1",
-        "webpack-fix-style-only-entries": "^0.6",
+        "webpack-dev-server": "^4",
         "webpack-manifest-plugin": "^5"
     }
 }
