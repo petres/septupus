@@ -26,7 +26,7 @@ class WebManager(MultiManager):
         self.app = Flask(__name__,
             instance_relative_config=True,
         )
-        self.app.config.from_pyfile('./config.py', silent=True)
+        # self.app.config.from_pyfile('./config.py', silent=True)
 
         camera.cam = self.modules['camera']
         serial.ser = self.modules['serial']

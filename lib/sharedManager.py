@@ -1,5 +1,5 @@
 from multiprocessing import Value
-from enum import IntEnum, auto
+from enum import IntEnum
 import logging
 import json
 

@@ -3,12 +3,8 @@ from flask import (
     current_app, send_from_directory, send_file, Response, jsonify
 )
 import time
-
 bp = Blueprint('camera', __name__, url_prefix='/camera')
-
-@bp.route('/')
-def index():
-    return render_template('camera/camera.html.j2')
+cam = None
 
 @bp.route('/stop')
 def stop():

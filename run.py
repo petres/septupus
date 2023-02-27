@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 from web import WebManager
-from flask import request
-import threading
 from lib.multiManager import MultiManager
 from lib.camera.cameraManager import CameraManager
 from lib.robot.robotManager import RobotManager
 from lib.robot.serialManager import SerialManager
 from lib.games.spaceInvadersManager import SpaceInvadersManager
+from lib.games.noddingManager import NoddingManager
 import logging
 import sys
 import time
@@ -25,7 +24,8 @@ def main(screen = None):
         'camera': CameraManager(),
         'web': WebManager(),
         'robot': RobotManager(),
-        'spaceInvaders': SpaceInvadersManager(screen)
+        # 'spaceInvaders': SpaceInvadersManager(screen),
+        'nodding': NoddingManager(screen),
     }
 
     for n, m in modules.items():
@@ -39,7 +39,7 @@ def main(screen = None):
 
     time.sleep(0.01)
 
-    modules['spaceInvaders'].run()
+    modules['nodding'].run()
 
     for n, m in modules.items():
         m.save()

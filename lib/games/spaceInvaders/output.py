@@ -164,9 +164,7 @@ class Output(object):
         if y > self.areas['game']['size'][1] + h or y < 0:
             Object.objects.remove(o)
             return
-
-        signs = o.getSigns()
-
+        
         for i, line in enumerate(o.signs):
             py = y + i
             if py < self.areas['game']['size'][1] and py >= 0:

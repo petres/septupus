@@ -3,7 +3,7 @@ from enum import IntEnum, auto
 from .spaceInvaders.controller import ScreenController
 from .spaceInvaders.output import Output
 from .spaceInvaders.game import Game
-from .spaceInvaders.writer import ScreenWriter
+from .shared.writer import ScreenWriter
 from .spaceInvaders.config import config
 from ..sharedManager import SharedManager
 from numpy.random import choice

@@ -3,8 +3,10 @@ import numpy as np
 import logging
 from multiprocessing import Array
 from enum import IntEnum, auto
-from .cameraProcessor import CameraProcessor
+# from .cameraProcessorPositionShoot import CameraProcessor
+from .cameraProcessorNodding import CameraProcessor, GestureTypes
 from ..multiManager import MultiManager
+
 
 
 class CameraManager(MultiManager):
@@ -13,9 +15,11 @@ class CameraManager(MultiManager):
     class ImageTypes(IntEnum):
         off = auto()
         org = auto()
-        gray = auto()
-        thresh = auto()
-        overlay = auto()
+        # overlay = auto()
+        
+        # TODO: move to processor
+        # gray = auto()
+        # thresh = auto()
 
     resolutions = [
         (160, 120),
@@ -55,17 +59,24 @@ class CameraManager(MultiManager):
                 }
             },
             'output': {
-                'position': {
-                    'name': "Position",
-                    'type': 'f',
-                    'value': 0.5
+                # 'position': {
+                #     'name': "Position",
+                #     'type': 'f',
+                #     'value': 0.5
+                # },
+                # 'shootFlag': {
+                #     'name': "Shoot Flag",
+                #     'type': 'b',
+                #     'value': 0
+                # },
+                'gesture': {
+                    'name': "gesture",
+                    'type': 'I', 'control': 'radio',
+                    'value': GestureTypes.undefined,
+                    'options': {i.name: i.value for i in GestureTypes}
                 },
-                'shootFlag': {
-                    'name': "Shoot Flag",
-                    'type': 'b',
-                    'value': 0
-                }
             },
+
             'processor': self.processor.vars
         }
         vars.update(super().getVars())
@@ -76,13 +87,15 @@ class CameraManager(MultiManager):
             'control': [
                 'multi.sleep',
                 'control.showImage',
-                'control.overlay'
+                'control.overlay',
             ],
             'processor': ['processor.' + i for i in self.vars['processor'].keys()],
             'output': [
-                'output.position',
-                'output.shootFlag',
+                'output.gesture',
+                # 'output.position',
+                # 'output.shootFlag',
             ]
+            
         }
 
     def prepare(self):
@@ -105,17 +118,20 @@ class CameraManager(MultiManager):
         params = {k: self.getValue('processor.' + k) for k, v in self.vars['processor'].items()}
         imageType = self.ImageTypes(self.getValue('control.showImage')).name
         params['control.showImage'] = imageType
+        params['control.overlay'] = 'overlay' in self.getVars()['control'] and self.getValue('control.overlay') == 1
         o = self.cp.evaluate(frame, params)
 
-        output = o['output']
-        for k in output.keys():
-            if output[k] is not None:
-                self.setValue('.'.join(['output', k]), output[k])
+        if 'output' in o:
+            output = o['output']
+            # logging.debug(f'Output: {output}')
+            for k in output.keys():
+                if output[k] is not None:
+                    self.setValue('.'.join(['output', k]), output[k])
 
         if imageType != "off":
             images = o['images']
             i = images[imageType]
-            if self.getValue('control.overlay') == 1 and "overlay" in images:
+            if params['control.overlay'] and 'overlay' in images:
                 overlay = images['overlay']
                 cnd = (overlay[:, :, 0] + overlay[:, :, 1] + overlay[:, :, 2]) > 0
                 i[cnd] = overlay[cnd]

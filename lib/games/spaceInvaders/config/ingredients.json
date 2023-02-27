@@ -1,21 +1,24 @@
 {
     "beverages": {
-        "rum": {
+        "Vodka": {
             "category": "A"
         },
-        "vodka": {
+        "Gin": {
             "category": "A"
         },
-        "orange": {
+        "Water": {
             "category": "N"
         },
-        "gin": {
-            "category": "A"
-        },
-        "tonic": {
+        "Apple": {
             "category": "N"
         },
-        "cola": {
+        "Makava": {
+            "category": "N"
+        },
+        "Cranberry": {
+            "category": "N"
+        },
+        "Orange": {
             "category": "N"
         }
     },

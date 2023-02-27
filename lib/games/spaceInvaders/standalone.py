@@ -1,7 +1,7 @@
 import logging
 import curses
 from .output import Output
-from .writer import ScreenWriter
+from ..shared.writer import ScreenWriter
 from .game import Game
 from .controller import ScreenController
 

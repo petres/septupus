@@ -39,6 +39,7 @@ class ScreenWriter(Writer):
         cx, cy = coords
         try:
             self.screen.addstr(cy, cx, signs, curses.color_pair(color))
+            # logging.info("addSigns")
         except curses.error:
             pass
 
