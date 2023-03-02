@@ -1,0 +1,26 @@
+{
+    "init": {
+        "device": 0,
+        "resolution": 0
+    },
+    "control": {
+        "showImage": 4,
+        "overlay": 1
+    },
+    "output": {
+        "position": 0.20544512569904327,
+        "shootFlag": 0
+    },
+    "processor": {
+        "threshold": 100,
+        "slidingWindowSize": 5,
+        "slidingWindowShootSize": 4,
+        "shootHeight": 8,
+        "mirror": 1,
+        "margin": 21
+    },
+    "multi": {
+        "sleep": 0,
+        "flag": 1
+    }
+}

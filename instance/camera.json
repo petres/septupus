@@ -1,0 +1,21 @@
+{
+    "init": {
+        "device": 0,
+        "resolution": 4
+    },
+    "control": {
+        "showImage": 2,
+        "overlay": 1
+    },
+    "processor": {
+        "motion_threshold": 0.699999988079071,
+        "gesture_threshold": 0.800000011920929
+    },
+    "output": {
+        "gesture": 1
+    },
+    "multi": {
+        "sleep": 5,
+        "flag": 1
+    }
+}

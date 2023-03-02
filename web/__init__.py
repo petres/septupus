@@ -28,11 +28,14 @@ class WebManager(MultiManager):
         )
         # self.app.config.from_pyfile('./config.py', silent=True)
 
-        camera.cam = self.modules['camera']
-        serial.ser = self.modules['serial']
-
-        self.app.register_blueprint(camera.bp)
-        self.app.register_blueprint(serial.bp)
+        if 'camera' in self.modules:
+            camera.cam = self.modules['camera']
+            self.app.register_blueprint(camera.bp)
+            
+        
+        if 'serial' in self.modules:
+            serial.ser = self.modules['serial']
+            self.app.register_blueprint(serial.bp)
 
         self.socketio = SocketIO(self.app)
         #app.add_url_rule('/', endpoint='index')

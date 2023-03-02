@@ -1,0 +1,45 @@
+{
+    "ingredients": {
+        "_wo_": {
+            "name": "NONE"
+        },
+        "vodka": {
+            "name": "Vodka",
+            "category": "A"
+        },
+        "gin": {
+            "name": "Gin",
+            "category": "A"
+        },
+        "water": {
+            "name": "Water",
+            "category": "N"
+        },
+        "apple": {
+            "name": "Apple",
+            "category": "N"
+        },
+        "makava": {
+            "name": "Makava",
+            "category": "N"
+        },
+        "cranberry": {
+            "name": "Cranberry",
+            "category": "N"
+        },
+        "orange": {
+            "name": "Orange",
+            "category": "N"
+        }
+    },
+    "catgories": {
+        "N": {
+            "name": "non-alcoholic",
+            "factor": 2
+        },
+        "A": {
+            "name": "alcoholic",
+            "factor": 1
+        }
+    }
+}

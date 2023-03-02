@@ -1,27 +1,33 @@
 import logging
 #from enum import IntEnum, auto
 from ..multiManager import MultiManager
-from ..games.spaceInvaders.config import config
+# from ..games.spaceInvaders.config import config
 from queue import Queue
 from enum import IntEnum, auto
+import json
 
 log = logging.getLogger("robot")
 
+class State(IntEnum):
+    ready = auto()
+    readyCup = auto()
+    pouring = auto()
+    bottleEmpty = auto()
+    error = auto()
+    unknown = auto()
+
 class RobotManager(MultiManager):
     file = "instance/robot.json"
+    file_ingredients = "instance/ingredients.json"
 
-    class State(IntEnum):
-        ready = auto()
-        readyCup = auto()
-        pouring = auto()
-        bottleEmpty = auto()
-        error = auto()
-        unknown = auto()
+
 
     def __init__(self):
-        self.ingredients = list(config.getValue('ingredients.beverages').keys())
-        self.ingredients.append('NONE')
-        self.state = self.State.unknown
+        with open(self.file_ingredients) as f:
+            self.ingredients_config = json.load(f)
+            
+        self.ingredients = list(self.ingredients_config['ingredients'].keys())
+        self.state = State.unknown
         self.pourQueue = Queue()
         super().__init__()
 
@@ -30,8 +36,8 @@ class RobotManager(MultiManager):
             'state': {
                 'name': "State",
                 'type': 'I', 'control': 'radio',
-                'value': self.State.unknown.value,
-                'options': {i.name: i.value for i in self.State}
+                'value': State.unknown.value,
+                'options': {i.name: i.value for i in State}
             },
             'assignment': {
             },
@@ -51,7 +57,7 @@ class RobotManager(MultiManager):
             },
         }
 
-        options = {r: i for i, r in enumerate(self.ingredients)}
+        options = {r['name']: i for i, r in enumerate(self.ingredients_config['ingredients'].values())}
         assignmentTemplate = {
             'name': "Bottle %s",
             'type': 'I', 'control': 'combo',
@@ -80,7 +86,7 @@ class RobotManager(MultiManager):
         ingredients = []
         for id in ['assignment.' + i for i in self.vars['assignment'].keys()]:
             v = self.ingredients[self.getValue(id)]
-            if v != 'NONE':
+            if v != '_wo_':
                 ingredients.append(v)
         #log.info(ingredients)
         return set(ingredients)
@@ -92,7 +98,7 @@ class RobotManager(MultiManager):
         raise Exception('Ingredient %s not available!' % ingredient)
 
     def prepare(self):
-        self.state = self.State.unknown
+        self.state = State.unknown
         self.pourQueue = Queue()
 
     def send(self, verb, *args):
@@ -104,9 +110,9 @@ class RobotManager(MultiManager):
         commandList = line.split(" ")
         if commandList[0] == "READY":
             if int(commandList[2]) == 1:
-                self.state = self.State.readyCup
+                self.state = State.readyCup
             else:
-                self.state = self.State.ready
+                self.state = State.ready
         elif commandList[0] == "WAITING_FOR_CUP":
             pass
         elif commandList[0] == "POURING":
@@ -114,23 +120,23 @@ class RobotManager(MultiManager):
         elif commandList[0] == "ENJOY":
             pass
             # if self.State.bottleEmpty:
-            #     self.state = self.State.bottleEmpty
+            #     self.state = State.bottleEmpty
                 #self.listenCallback("bottleEmptyResume")
         elif commandList[0] == "ERROR":
             if commandList[1] == "BOTTLE_EMPTY":
-                self.state = self.State.bottleEmpty
+                self.state = State.bottleEmpty
                 #self.listenCallback("bottleEmpty")
         elif commandList[0] == "NOP":
             pass
         else:
             pass
 
-        if self.modules['spaceInvaders']:
-            self.modules['spaceInvaders'].robotStateUpdate(self.state)
+        # if self.modules['spaceInvaders']:
+        #     self.modules['spaceInvaders'].robotStateUpdate(self.state)
         #self.listenCallback(command)
 
-        # if not self.pourQueue.empty() and self.state == self.State.readyCup:
-        #     self.pour(*self.pourQueue.get())
+        if not self.pourQueue.empty() and self.state == State.readyCup:
+            self.pour(*self.pourQueue.get())
 
         # elif self.input == ord('l'):
         #     if game.cupThere:
@@ -140,6 +146,20 @@ class RobotManager(MultiManager):
         #
         # if self.input == ord('r') or (not game.gameStarted and game.cupThere and game.cupTaken):
         #     game.prepare()
+        
+    def pourDrink(self, ingredients):
+        volume = self.getValue('mixing.volume');
+        
+        temp = [0] * 7
+        # try:
+        for ingredient, share in ingredients.items():
+            port = self.getPortForIngredient(ingredient)
+            temp[port] = int(share * volume)
+            
+        logging.info(f'Put on pour queue: `{" ".join([str(i) for i in temp])}`')
+        self.pourQueue.put(temp)
+        # except Exception as e:
+        #     log.warning(e)
 
 
     def pourBottle(self, bottleNr, amount):
@@ -169,7 +189,7 @@ class RobotManager(MultiManager):
 
     def abort(self):
         """abort current cocktail"""
-        self.state = self.State.unknown
+        self.state = State.unknown
         self.send("ABORT")
 
     def resume(self):

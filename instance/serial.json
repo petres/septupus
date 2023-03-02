@@ -1,0 +1,9 @@
+{
+    "init": {
+        "port": 0
+    },
+    "multi": {
+        "sleep": 50,
+        "flag": 1
+    }
+}

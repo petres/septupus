@@ -1,0 +1,24 @@
+{
+    "game": {
+        "sleepTime": 19,
+        "lifes": 3,
+        "inputType": 2,
+        "shoot": {
+            "speed": 10,
+            "pause": 8
+        },
+        "objectSpeed": {
+            "min": 4,
+            "max": 8
+        },
+        "creationTimes": {
+            "invaders": 464,
+            "goodies": 440
+        },
+        "sound": 0
+    },
+    "control": {
+        "position": 0.6515315771102905,
+        "shootFlag": 0
+    }
+}
